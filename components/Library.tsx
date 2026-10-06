@@ -4,10 +4,8 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Book, BookKind } from "@/lib/types";
 import { library } from "@/lib/store/db";
-import { useGlobalTheme } from "@/lib/useGlobalTheme";
 
 export function Library() {
-  const { theme, vars } = useGlobalTheme();
   const [books, setBooks] = useState<Book[] | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -92,16 +90,12 @@ export function Library() {
   };
 
   return (
-    <div
-      data-theme={theme}
-      style={vars}
-      className="reader min-h-dvh w-full"
-    >
+    <div className="min-h-dvh w-full">
       <div className="mx-auto w-full max-w-5xl px-5 pt-14 pb-20">
         <header className="mb-10 flex items-end justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-semibold tracking-tight text-[var(--r-fg)]">aki</h1>
-            <p className="mt-1 text-sm text-[var(--r-dim)]">PDF &amp; EPUB reader</p>
+            <h1 className="text-3xl font-semibold tracking-tight text-foreground">aki</h1>
+            <p className="mt-1 text-sm text-muted-foreground">PDF &amp; EPUB reader</p>
           </div>
 
           <div>
@@ -116,7 +110,7 @@ export function Library() {
             <button
               onClick={() => fileRef.current?.click()}
               disabled={busy}
-              className="rounded-full bg-[var(--r-fg)] px-5 py-2.5 text-sm font-medium text-[var(--r-bg)] transition opacity-90 hover:opacity-100 disabled:opacity-50"
+              className="rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition opacity-90 hover:opacity-100 disabled:opacity-50"
             >
               {busy ? "Adding…" : "Add books"}
             </button>
@@ -124,15 +118,15 @@ export function Library() {
         </header>
 
         {error && (
-          <p className="mb-6 rounded-lg px-4 py-3 text-sm text-red-700 dark:text-red-300" style={{ background: "color-mix(in srgb, var(--r-accent) 12%, transparent)" }}>
+          <p className="mb-6 rounded-lg bg-destructive/15 px-4 py-3 text-sm text-destructive">
             {error}
           </p>
         )}
 
         {books === null ? (
-          <p className="text-sm text-[var(--r-dim)]">Loading library…</p>
+          <p className="text-sm text-muted-foreground">Loading library…</p>
         ) : books.length === 0 ? (
-          <div className="rounded-2xl border border-dashed text-[var(--r-dim)] py-20 text-center" style={{ borderColor: "color-mix(in srgb, currentColor 35%, transparent)" }}>
+          <div className="rounded-2xl border border-dashed py-20 text-center text-muted-foreground">
             <p>No books yet.</p>
             <p className="mt-1 text-sm">Add a PDF or EPUB to get started.</p>
           </div>
@@ -141,16 +135,13 @@ export function Library() {
             {books.map((book) => (
               <li key={book.id} className="group relative">
                 <Link href={`/read?id=${book.id}`} className="block">
-                  <div
-                    className="flex aspect-[2/3] items-end overflow-hidden rounded-xl p-3 shadow-sm transition group-hover:shadow-md"
-                    style={{ background: "color-mix(in srgb, var(--r-panel) 70%, var(--r-bg))" }}
-                  >
+                  <div className="flex aspect-[2/3] items-end overflow-hidden rounded-xl bg-card p-3 shadow-sm transition group-hover:shadow-md">
                     <div className="w-full">
-                      <p className="line-clamp-4 text-sm leading-snug font-medium text-[var(--r-fg)]">
+                      <p className="line-clamp-4 text-sm leading-snug font-medium text-foreground">
                         {book.title}
                       </p>
                       {book.author && (
-                        <p className="mt-1 line-clamp-1 text-xs text-[var(--r-dim)]">
+                        <p className="mt-1 line-clamp-1 text-xs text-muted-foreground">
                           {book.author}
                         </p>
                       )}
@@ -158,8 +149,8 @@ export function Library() {
                   </div>
 
                   {book.progress != null && book.progress > 0 && (
-                    <div className="mt-2 h-1 overflow-hidden rounded-full" style={{ background: "color-mix(in srgb, var(--r-dim) 25%, transparent)" }}>
-                      <div className="h-full bg-[var(--r-accent)]" style={{ width: `${book.progress}%` }} />
+                    <div className="mt-2 h-1 overflow-hidden rounded-full bg-muted">
+                      <div className="h-full bg-primary" style={{ width: `${book.progress}%` }} />
                     </div>
                   )}
                 </Link>
@@ -167,13 +158,12 @@ export function Library() {
                 <button
                   onClick={() => remove(book.id, book.title)}
                   aria-label={`Remove ${book.title}`}
-                  className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full text-[var(--r-dim)] opacity-0 shadow transition group-hover:opacity-100 hover:text-red-600"
-                  style={{ background: "color-mix(in srgb, var(--r-panel) 90%, transparent)" }}
+                  className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-card text-muted-foreground opacity-0 shadow transition group-hover:opacity-100 hover:text-destructive"
                 >
                   ×
                 </button>
 
-                <span className="mt-1.5 block text-[11px] text-[var(--r-dim)] uppercase">
+                <span className="mt-1.5 block text-[11px] text-muted-foreground uppercase">
                   {book.kind} · {book.units} {book.kind === "pdf" ? "pages" : "sections"}
                 </span>
               </li>
