@@ -63,7 +63,9 @@ jobs:
         run: npx cap sync android
 
       - name: Build debug APK
-        run: ./gradlew assembleDebug
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
         working-directory: android
 
       - name: Upload APK
@@ -83,7 +85,9 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-        run: ./gradlew bundleRelease
+        run: |
+          chmod +x gradlew
+          ./gradlew bundleRelease
         working-directory: android
 
       - name: Upload AAB
