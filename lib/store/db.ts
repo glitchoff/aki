@@ -89,11 +89,17 @@ const GLOBAL_KEY = "__global__";
 
 export const settings = {
   async for(bookId: string): Promise<Typography> {
+    const global = await this.global();
+    const perBook = await tx<Typography | undefined>(SETTINGS, "readonly", (s) => s.get(bookId));
+    return { ...global, ...(perBook ?? {}) };
+  },
+
+  /** The global (app-wide) typography, with defaults when unset. */
+  async global(): Promise<Typography> {
     const global = await tx<Typography | undefined>(SETTINGS, "readonly", (s) =>
       s.get(GLOBAL_KEY),
     );
-    const perBook = await tx<Typography | undefined>(SETTINGS, "readonly", (s) => s.get(bookId));
-    return { ...(global ?? DEFAULT_TYPOGRAPHY), ...(perBook ?? {}) };
+    return global ?? DEFAULT_TYPOGRAPHY;
   },
 
   setGlobal: (value: Typography) =>

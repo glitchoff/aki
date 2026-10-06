@@ -87,8 +87,10 @@ export function Reader() {
     (next: Typography) => {
       setTypo(next);
       if (id) settings.setForBook(id, next);
+      // The theme choice is app-wide: reflect it in the library and chrome too.
+      if (next.theme !== typo.theme) settings.setGlobal(next);
     },
-    [id],
+    [id, typo.theme],
   );
 
   if (status) {
