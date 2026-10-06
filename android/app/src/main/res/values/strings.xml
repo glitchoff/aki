@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">aki</string>
+    <string name="title_activity_main">aki</string>
+    <string name="package_name">com.example.aki</string>
+    <string name="custom_url_scheme">com.example.aki</string>
+</resources>
