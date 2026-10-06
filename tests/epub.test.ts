@@ -115,7 +115,7 @@ describe("EPUB parsing", () => {
     const book = parseEpub(
       buffer(
         buildEpub({
-          chapters: { "ch1.xhtml": '<html><body><img src="missing.png"/></body></html>' },
+          chapters: { "ch1.xhtml": '<html><body><p>Look:</p><img src="missing.png"/></body></html>' },
         }),
       ),
     );

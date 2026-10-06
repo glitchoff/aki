@@ -70,7 +70,12 @@ const url = URL.createObjectURL(new Blob([bytes as BlobPart], { type: mimeOf(src
  * ------------------------------------------------------------------------- */
 
 export function parseEpub(data: ArrayBuffer): EpubBook {
-  const zip = unzipSync(new Uint8Array(data));
+  let zip: Record<string, Uint8Array>;
+  try {
+    zip = unzipSync(new Uint8Array(data));
+  } catch {
+    throw new Error("Not a valid EPUB: could not read archive");
+  }
 
   // 1. container.xml -> OPF path
   const containerText = readText(zip, "META-INF/container.xml");
